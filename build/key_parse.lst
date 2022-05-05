@@ -1,0 +1,1488 @@
+ARM GAS  /tmp/ccjKiXZ0.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"key_parse.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.ascii_to_key,"ax",%progbits
+  18              		.align	1
+  19              		.global	ascii_to_key
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	ascii_to_key:
+  27              	.LVL0:
+  28              	.LFB134:
+  29              		.file 1 "Core/Src/key_parse.c"
+   1:Core/Src/key_parse.c **** #include "usbd_hid.h"
+   2:Core/Src/key_parse.c **** #include "usb_device.h"
+   3:Core/Src/key_parse.c **** #include "key_parse.h"
+   4:Core/Src/key_parse.c **** //连续三个相同有问题，需要先弹起
+   5:Core/Src/key_parse.c **** extern USBD_HandleTypeDef hUsbDeviceFS;
+   6:Core/Src/key_parse.c **** unsigned char ascii_to_key(unsigned char ascii){
+  30              		.loc 1 6 48 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+   7:Core/Src/key_parse.c ****     if(32<=ascii&&ascii<=126){
+  35              		.loc 1 7 5 view .LVU1
+  36              		.loc 1 7 17 is_stmt 0 view .LVU2
+  37 0000 A0F12003 		sub	r3, r0, #32
+  38 0004 DBB2     		uxtb	r3, r3
+  39              		.loc 1 7 7 view .LVU3
+  40 0006 5E2B     		cmp	r3, #94
+  41 0008 52D8     		bhi	.L18
+   8:Core/Src/key_parse.c ****         if(0x41<=ascii&&ascii<=0x5a){//大写字母
+  42              		.loc 1 8 9 is_stmt 1 view .LVU4
+  43              		.loc 1 8 23 is_stmt 0 view .LVU5
+  44 000a A0F14103 		sub	r3, r0, #65
+  45 000e DBB2     		uxtb	r3, r3
+  46              		.loc 1 8 11 view .LVU6
+  47 0010 192B     		cmp	r3, #25
+  48 0012 0ED9     		bls	.L21
+   9:Core/Src/key_parse.c ****             return ascii-0x3d;
+  10:Core/Src/key_parse.c ****         }
+ARM GAS  /tmp/ccjKiXZ0.s 			page 2
+
+
+  11:Core/Src/key_parse.c ****         if(0x61<=ascii&&ascii<=0x7a){//小写字母
+  49              		.loc 1 11 9 is_stmt 1 view .LVU7
+  50              		.loc 1 11 23 is_stmt 0 view .LVU8
+  51 0014 A0F16103 		sub	r3, r0, #97
+  52 0018 DBB2     		uxtb	r3, r3
+  53              		.loc 1 11 11 view .LVU9
+  54 001a 192B     		cmp	r3, #25
+  55 001c 0CD9     		bls	.L22
+  12:Core/Src/key_parse.c ****             return ascii-0x5d;
+  13:Core/Src/key_parse.c ****         }
+  14:Core/Src/key_parse.c ****         if(0x30<=ascii&&ascii<=0x39){//数字
+  56              		.loc 1 14 9 is_stmt 1 view .LVU10
+  57              		.loc 1 14 23 is_stmt 0 view .LVU11
+  58 001e A0F13003 		sub	r3, r0, #48
+  59 0022 DBB2     		uxtb	r3, r3
+  60              		.loc 1 14 11 view .LVU12
+  61 0024 092B     		cmp	r3, #9
+  62 0026 0AD8     		bhi	.L5
+  15:Core/Src/key_parse.c ****             if(ascii==0x30) return 0x27;
+  63              		.loc 1 15 13 is_stmt 1 view .LVU13
+  64              		.loc 1 15 15 is_stmt 0 view .LVU14
+  65 0028 3028     		cmp	r0, #48
+  66 002a 43D0     		beq	.L19
+  16:Core/Src/key_parse.c ****             return ascii-0x13;
+  67              		.loc 1 16 13 is_stmt 1 view .LVU15
+  68              		.loc 1 16 25 is_stmt 0 view .LVU16
+  69 002c 1338     		subs	r0, r0, #19
+  70              	.LVL1:
+  71              		.loc 1 16 25 view .LVU17
+  72 002e C0B2     		uxtb	r0, r0
+  73 0030 7047     		bx	lr
+  74              	.LVL2:
+  75              	.L21:
+   9:Core/Src/key_parse.c ****         }
+  76              		.loc 1 9 13 is_stmt 1 view .LVU18
+   9:Core/Src/key_parse.c ****         }
+  77              		.loc 1 9 25 is_stmt 0 view .LVU19
+  78 0032 3D38     		subs	r0, r0, #61
+  79              	.LVL3:
+   9:Core/Src/key_parse.c ****         }
+  80              		.loc 1 9 25 view .LVU20
+  81 0034 C0B2     		uxtb	r0, r0
+  82 0036 7047     		bx	lr
+  83              	.LVL4:
+  84              	.L22:
+  12:Core/Src/key_parse.c ****         }
+  85              		.loc 1 12 13 is_stmt 1 view .LVU21
+  12:Core/Src/key_parse.c ****         }
+  86              		.loc 1 12 25 is_stmt 0 view .LVU22
+  87 0038 5D38     		subs	r0, r0, #93
+  88              	.LVL5:
+  12:Core/Src/key_parse.c ****         }
+  89              		.loc 1 12 25 view .LVU23
+  90 003a C0B2     		uxtb	r0, r0
+  91 003c 7047     		bx	lr
+  92              	.LVL6:
+  93              	.L5:
+ARM GAS  /tmp/ccjKiXZ0.s 			page 3
+
+
+  17:Core/Src/key_parse.c ****         }
+  18:Core/Src/key_parse.c ****         switch (ascii)
+  94              		.loc 1 18 9 is_stmt 1 view .LVU24
+  95 003e A0F12003 		sub	r3, r0, #32
+  96 0042 3D2B     		cmp	r3, #61
+  97 0044 32D8     		bhi	.L6
+  98 0046 DFE803F0 		tbb	[pc, r3]
+  99              	.L8:
+ 100 004a 2F       		.byte	(.L17-.L8)/2
+ 101 004b 31       		.byte	(.L6-.L8)/2
+ 102 004c 31       		.byte	(.L6-.L8)/2
+ 103 004d 31       		.byte	(.L6-.L8)/2
+ 104 004e 31       		.byte	(.L6-.L8)/2
+ 105 004f 31       		.byte	(.L6-.L8)/2
+ 106 0050 31       		.byte	(.L6-.L8)/2
+ 107 0051 25       		.byte	(.L16-.L8)/2
+ 108 0052 31       		.byte	(.L6-.L8)/2
+ 109 0053 31       		.byte	(.L6-.L8)/2
+ 110 0054 31       		.byte	(.L6-.L8)/2
+ 111 0055 31       		.byte	(.L6-.L8)/2
+ 112 0056 29       		.byte	(.L15-.L8)/2
+ 113 0057 38       		.byte	(.L2-.L8)/2
+ 114 0058 2B       		.byte	(.L13-.L8)/2
+ 115 0059 2D       		.byte	(.L12-.L8)/2
+ 116 005a 31       		.byte	(.L6-.L8)/2
+ 117 005b 31       		.byte	(.L6-.L8)/2
+ 118 005c 31       		.byte	(.L6-.L8)/2
+ 119 005d 31       		.byte	(.L6-.L8)/2
+ 120 005e 31       		.byte	(.L6-.L8)/2
+ 121 005f 31       		.byte	(.L6-.L8)/2
+ 122 0060 31       		.byte	(.L6-.L8)/2
+ 123 0061 31       		.byte	(.L6-.L8)/2
+ 124 0062 31       		.byte	(.L6-.L8)/2
+ 125 0063 31       		.byte	(.L6-.L8)/2
+ 126 0064 31       		.byte	(.L6-.L8)/2
+ 127 0065 23       		.byte	(.L11-.L8)/2
+ 128 0066 31       		.byte	(.L6-.L8)/2
+ 129 0067 37       		.byte	(.L20-.L8)/2
+ 130 0068 31       		.byte	(.L6-.L8)/2
+ 131 0069 31       		.byte	(.L6-.L8)/2
+ 132 006a 31       		.byte	(.L6-.L8)/2
+ 133 006b 31       		.byte	(.L6-.L8)/2
+ 134 006c 31       		.byte	(.L6-.L8)/2
+ 135 006d 31       		.byte	(.L6-.L8)/2
+ 136 006e 31       		.byte	(.L6-.L8)/2
+ 137 006f 31       		.byte	(.L6-.L8)/2
+ 138 0070 31       		.byte	(.L6-.L8)/2
+ 139 0071 31       		.byte	(.L6-.L8)/2
+ 140 0072 31       		.byte	(.L6-.L8)/2
+ 141 0073 31       		.byte	(.L6-.L8)/2
+ 142 0074 31       		.byte	(.L6-.L8)/2
+ 143 0075 31       		.byte	(.L6-.L8)/2
+ 144 0076 31       		.byte	(.L6-.L8)/2
+ 145 0077 31       		.byte	(.L6-.L8)/2
+ 146 0078 31       		.byte	(.L6-.L8)/2
+ 147 0079 31       		.byte	(.L6-.L8)/2
+ 148 007a 31       		.byte	(.L6-.L8)/2
+ARM GAS  /tmp/ccjKiXZ0.s 			page 4
+
+
+ 149 007b 31       		.byte	(.L6-.L8)/2
+ 150 007c 31       		.byte	(.L6-.L8)/2
+ 151 007d 31       		.byte	(.L6-.L8)/2
+ 152 007e 31       		.byte	(.L6-.L8)/2
+ 153 007f 31       		.byte	(.L6-.L8)/2
+ 154 0080 31       		.byte	(.L6-.L8)/2
+ 155 0081 31       		.byte	(.L6-.L8)/2
+ 156 0082 31       		.byte	(.L6-.L8)/2
+ 157 0083 31       		.byte	(.L6-.L8)/2
+ 158 0084 31       		.byte	(.L6-.L8)/2
+ 159 0085 1F       		.byte	(.L10-.L8)/2
+ 160 0086 27       		.byte	(.L9-.L8)/2
+ 161 0087 21       		.byte	(.L7-.L8)/2
+ 162              		.p2align 1
+ 163              	.L10:
+  19:Core/Src/key_parse.c ****         {
+  20:Core/Src/key_parse.c ****             case '-':return 0x2d;
+  21:Core/Src/key_parse.c ****             case '=':return 0x2e;
+  22:Core/Src/key_parse.c ****             case '[':return 0x2f;
+ 164              		.loc 1 22 22 view .LVU25
+ 165              		.loc 1 22 29 is_stmt 0 view .LVU26
+ 166 0088 2F20     		movs	r0, #47
+ 167              	.LVL7:
+ 168              		.loc 1 22 29 view .LVU27
+ 169 008a 7047     		bx	lr
+ 170              	.LVL8:
+ 171              	.L7:
+  23:Core/Src/key_parse.c ****             case ']':return 0x30;
+ 172              		.loc 1 23 22 is_stmt 1 view .LVU28
+ 173              		.loc 1 23 29 is_stmt 0 view .LVU29
+ 174 008c 3020     		movs	r0, #48
+ 175              	.LVL9:
+ 176              		.loc 1 23 29 view .LVU30
+ 177 008e 7047     		bx	lr
+ 178              	.LVL10:
+ 179              	.L11:
+  24:Core/Src/key_parse.c ****             case ';':return 0x33;
+ 180              		.loc 1 24 22 is_stmt 1 view .LVU31
+ 181              		.loc 1 24 29 is_stmt 0 view .LVU32
+ 182 0090 3320     		movs	r0, #51
+ 183              	.LVL11:
+ 184              		.loc 1 24 29 view .LVU33
+ 185 0092 7047     		bx	lr
+ 186              	.LVL12:
+ 187              	.L16:
+  25:Core/Src/key_parse.c ****             case 0x27:return 0x34;
+ 188              		.loc 1 25 23 is_stmt 1 view .LVU34
+ 189              		.loc 1 25 30 is_stmt 0 view .LVU35
+ 190 0094 3420     		movs	r0, #52
+ 191              	.LVL13:
+ 192              		.loc 1 25 30 view .LVU36
+ 193 0096 7047     		bx	lr
+ 194              	.LVL14:
+ 195              	.L9:
+  26:Core/Src/key_parse.c ****             case 0x5c:return 0x31;
+ 196              		.loc 1 26 23 is_stmt 1 view .LVU37
+ 197              		.loc 1 26 30 is_stmt 0 view .LVU38
+ARM GAS  /tmp/ccjKiXZ0.s 			page 5
+
+
+ 198 0098 3120     		movs	r0, #49
+ 199              	.LVL15:
+ 200              		.loc 1 26 30 view .LVU39
+ 201 009a 7047     		bx	lr
+ 202              	.LVL16:
+ 203              	.L15:
+  27:Core/Src/key_parse.c ****             case ',':return 0x36;
+ 204              		.loc 1 27 22 is_stmt 1 view .LVU40
+ 205              		.loc 1 27 29 is_stmt 0 view .LVU41
+ 206 009c 3620     		movs	r0, #54
+ 207              	.LVL17:
+ 208              		.loc 1 27 29 view .LVU42
+ 209 009e 7047     		bx	lr
+ 210              	.LVL18:
+ 211              	.L13:
+  28:Core/Src/key_parse.c ****             case '.':return 0x37;
+ 212              		.loc 1 28 22 is_stmt 1 view .LVU43
+ 213              		.loc 1 28 29 is_stmt 0 view .LVU44
+ 214 00a0 3720     		movs	r0, #55
+ 215              	.LVL19:
+ 216              		.loc 1 28 29 view .LVU45
+ 217 00a2 7047     		bx	lr
+ 218              	.LVL20:
+ 219              	.L12:
+  29:Core/Src/key_parse.c ****             case '/':return 0x38;
+ 220              		.loc 1 29 22 is_stmt 1 view .LVU46
+ 221              		.loc 1 29 29 is_stmt 0 view .LVU47
+ 222 00a4 3820     		movs	r0, #56
+ 223              	.LVL21:
+ 224              		.loc 1 29 29 view .LVU48
+ 225 00a6 7047     		bx	lr
+ 226              	.LVL22:
+ 227              	.L17:
+  30:Core/Src/key_parse.c ****             case ' ':return KEY_SPACE;
+ 228              		.loc 1 30 22 is_stmt 1 view .LVU49
+ 229              		.loc 1 30 29 is_stmt 0 view .LVU50
+ 230 00a8 2C20     		movs	r0, #44
+ 231              	.LVL23:
+ 232              		.loc 1 30 29 view .LVU51
+ 233 00aa 7047     		bx	lr
+ 234              	.LVL24:
+ 235              	.L6:
+  31:Core/Src/key_parse.c ****             default:return 0;
+ 236              		.loc 1 31 21 is_stmt 1 view .LVU52
+ 237              		.loc 1 31 28 is_stmt 0 view .LVU53
+ 238 00ac 0020     		movs	r0, #0
+ 239              	.LVL25:
+ 240              		.loc 1 31 28 view .LVU54
+ 241 00ae 7047     		bx	lr
+ 242              	.LVL26:
+ 243              	.L18:
+  32:Core/Src/key_parse.c ****         }
+  33:Core/Src/key_parse.c ****     }else{
+  34:Core/Src/key_parse.c ****         return 0;
+ 244              		.loc 1 34 16 view .LVU55
+ 245 00b0 0020     		movs	r0, #0
+ 246              	.LVL27:
+ARM GAS  /tmp/ccjKiXZ0.s 			page 6
+
+
+ 247              		.loc 1 34 16 view .LVU56
+ 248 00b2 7047     		bx	lr
+ 249              	.LVL28:
+ 250              	.L19:
+  15:Core/Src/key_parse.c ****             return ascii-0x13;
+ 251              		.loc 1 15 36 view .LVU57
+ 252 00b4 2720     		movs	r0, #39
+ 253              	.LVL29:
+  15:Core/Src/key_parse.c ****             return ascii-0x13;
+ 254              		.loc 1 15 36 view .LVU58
+ 255 00b6 7047     		bx	lr
+ 256              	.LVL30:
+ 257              	.L20:
+  21:Core/Src/key_parse.c ****             case '[':return 0x2f;
+ 258              		.loc 1 21 29 view .LVU59
+ 259 00b8 2E20     		movs	r0, #46
+ 260              	.LVL31:
+ 261              	.L2:
+  35:Core/Src/key_parse.c ****     }
+  36:Core/Src/key_parse.c ****     return 0;
+  37:Core/Src/key_parse.c **** }
+ 262              		.loc 1 37 1 view .LVU60
+ 263 00ba 7047     		bx	lr
+ 264              		.cfi_endproc
+ 265              	.LFE134:
+ 267              		.section	.text.parse_key,"ax",%progbits
+ 268              		.align	1
+ 269              		.global	parse_key
+ 270              		.syntax unified
+ 271              		.thumb
+ 272              		.thumb_func
+ 273              		.fpu fpv4-sp-d16
+ 275              	parse_key:
+ 276              	.LVL32:
+ 277              	.LFB135:
+  38:Core/Src/key_parse.c **** unsigned char parse_key(unsigned char key){
+ 278              		.loc 1 38 43 is_stmt 1 view -0
+ 279              		.cfi_startproc
+ 280              		@ args = 0, pretend = 0, frame = 0
+ 281              		@ frame_needed = 0, uses_anonymous_args = 0
+ 282              		.loc 1 38 43 is_stmt 0 view .LVU62
+ 283 0000 08B5     		push	{r3, lr}
+ 284              	.LCFI0:
+ 285              		.cfi_def_cfa_offset 8
+ 286              		.cfi_offset 3, -8
+ 287              		.cfi_offset 14, -4
+  39:Core/Src/key_parse.c ****     //unsigned char temp=ascii_to_key(key);
+  40:Core/Src/key_parse.c **** 
+  41:Core/Src/key_parse.c ****     switch (key)
+ 288              		.loc 1 41 5 is_stmt 1 view .LVU63
+ 289 0002 A0F12103 		sub	r3, r0, #33
+ 290 0006 5C2B     		cmp	r3, #92
+ 291 0008 33D8     		bhi	.L24
+ 292 000a DFE803F0 		tbb	[pc, r3]
+ 293              	.L26:
+ 294 000e 2F       		.byte	(.L45-.L26)/2
+ 295 000f 6B       		.byte	(.L44-.L26)/2
+ARM GAS  /tmp/ccjKiXZ0.s 			page 7
+
+
+ 296 0010 37       		.byte	(.L43-.L26)/2
+ 297 0011 3B       		.byte	(.L42-.L26)/2
+ 298 0012 3F       		.byte	(.L41-.L26)/2
+ 299 0013 47       		.byte	(.L40-.L26)/2
+ 300 0014 32       		.byte	(.L24-.L26)/2
+ 301 0015 4F       		.byte	(.L39-.L26)/2
+ 302 0016 53       		.byte	(.L38-.L26)/2
+ 303 0017 4B       		.byte	(.L37-.L26)/2
+ 304 0018 5B       		.byte	(.L36-.L26)/2
+ 305 0019 32       		.byte	(.L24-.L26)/2
+ 306 001a 32       		.byte	(.L24-.L26)/2
+ 307 001b 32       		.byte	(.L24-.L26)/2
+ 308 001c 32       		.byte	(.L24-.L26)/2
+ 309 001d 32       		.byte	(.L24-.L26)/2
+ 310 001e 32       		.byte	(.L24-.L26)/2
+ 311 001f 32       		.byte	(.L24-.L26)/2
+ 312 0020 32       		.byte	(.L24-.L26)/2
+ 313 0021 32       		.byte	(.L24-.L26)/2
+ 314 0022 32       		.byte	(.L24-.L26)/2
+ 315 0023 32       		.byte	(.L24-.L26)/2
+ 316 0024 32       		.byte	(.L24-.L26)/2
+ 317 0025 32       		.byte	(.L24-.L26)/2
+ 318 0026 32       		.byte	(.L24-.L26)/2
+ 319 0027 67       		.byte	(.L35-.L26)/2
+ 320 0028 32       		.byte	(.L24-.L26)/2
+ 321 0029 73       		.byte	(.L34-.L26)/2
+ 322 002a 32       		.byte	(.L24-.L26)/2
+ 323 002b 77       		.byte	(.L33-.L26)/2
+ 324 002c 7B       		.byte	(.L32-.L26)/2
+ 325 002d 33       		.byte	(.L31-.L26)/2
+ 326 002e 32       		.byte	(.L24-.L26)/2
+ 327 002f 32       		.byte	(.L24-.L26)/2
+ 328 0030 32       		.byte	(.L24-.L26)/2
+ 329 0031 32       		.byte	(.L24-.L26)/2
+ 330 0032 32       		.byte	(.L24-.L26)/2
+ 331 0033 32       		.byte	(.L24-.L26)/2
+ 332 0034 32       		.byte	(.L24-.L26)/2
+ 333 0035 32       		.byte	(.L24-.L26)/2
+ 334 0036 32       		.byte	(.L24-.L26)/2
+ 335 0037 32       		.byte	(.L24-.L26)/2
+ 336 0038 32       		.byte	(.L24-.L26)/2
+ 337 0039 32       		.byte	(.L24-.L26)/2
+ 338 003a 32       		.byte	(.L24-.L26)/2
+ 339 003b 32       		.byte	(.L24-.L26)/2
+ 340 003c 32       		.byte	(.L24-.L26)/2
+ 341 003d 32       		.byte	(.L24-.L26)/2
+ 342 003e 32       		.byte	(.L24-.L26)/2
+ 343 003f 32       		.byte	(.L24-.L26)/2
+ 344 0040 32       		.byte	(.L24-.L26)/2
+ 345 0041 32       		.byte	(.L24-.L26)/2
+ 346 0042 32       		.byte	(.L24-.L26)/2
+ 347 0043 32       		.byte	(.L24-.L26)/2
+ 348 0044 32       		.byte	(.L24-.L26)/2
+ 349 0045 32       		.byte	(.L24-.L26)/2
+ 350 0046 32       		.byte	(.L24-.L26)/2
+ 351 0047 32       		.byte	(.L24-.L26)/2
+ 352 0048 32       		.byte	(.L24-.L26)/2
+ARM GAS  /tmp/ccjKiXZ0.s 			page 8
+
+
+ 353 0049 32       		.byte	(.L24-.L26)/2
+ 354 004a 32       		.byte	(.L24-.L26)/2
+ 355 004b 43       		.byte	(.L30-.L26)/2
+ 356 004c 57       		.byte	(.L29-.L26)/2
+ 357 004d 32       		.byte	(.L24-.L26)/2
+ 358 004e 32       		.byte	(.L24-.L26)/2
+ 359 004f 32       		.byte	(.L24-.L26)/2
+ 360 0050 32       		.byte	(.L24-.L26)/2
+ 361 0051 32       		.byte	(.L24-.L26)/2
+ 362 0052 32       		.byte	(.L24-.L26)/2
+ 363 0053 32       		.byte	(.L24-.L26)/2
+ 364 0054 32       		.byte	(.L24-.L26)/2
+ 365 0055 32       		.byte	(.L24-.L26)/2
+ 366 0056 32       		.byte	(.L24-.L26)/2
+ 367 0057 32       		.byte	(.L24-.L26)/2
+ 368 0058 32       		.byte	(.L24-.L26)/2
+ 369 0059 32       		.byte	(.L24-.L26)/2
+ 370 005a 32       		.byte	(.L24-.L26)/2
+ 371 005b 32       		.byte	(.L24-.L26)/2
+ 372 005c 32       		.byte	(.L24-.L26)/2
+ 373 005d 32       		.byte	(.L24-.L26)/2
+ 374 005e 32       		.byte	(.L24-.L26)/2
+ 375 005f 32       		.byte	(.L24-.L26)/2
+ 376 0060 32       		.byte	(.L24-.L26)/2
+ 377 0061 32       		.byte	(.L24-.L26)/2
+ 378 0062 32       		.byte	(.L24-.L26)/2
+ 379 0063 32       		.byte	(.L24-.L26)/2
+ 380 0064 32       		.byte	(.L24-.L26)/2
+ 381 0065 32       		.byte	(.L24-.L26)/2
+ 382 0066 32       		.byte	(.L24-.L26)/2
+ 383 0067 32       		.byte	(.L24-.L26)/2
+ 384 0068 5F       		.byte	(.L28-.L26)/2
+ 385 0069 6F       		.byte	(.L27-.L26)/2
+ 386 006a 63       		.byte	(.L25-.L26)/2
+ 387 006b 00       		.p2align 1
+ 388              	.L45:
+  42:Core/Src/key_parse.c ****     {
+  43:Core/Src/key_parse.c ****         case '!':return ascii_to_key('1');break;
+ 389              		.loc 1 43 18 view .LVU64
+ 390              		.loc 1 43 25 is_stmt 0 view .LVU65
+ 391 006c 3120     		movs	r0, #49
+ 392              	.LVL33:
+ 393              		.loc 1 43 25 view .LVU66
+ 394 006e FFF7FEFF 		bl	ascii_to_key
+ 395              	.LVL34:
+ 396              	.L24:
+  44:Core/Src/key_parse.c ****         case '@':return ascii_to_key('2');break;
+  45:Core/Src/key_parse.c ****         case '#':return ascii_to_key('3');break;
+  46:Core/Src/key_parse.c ****         case '$':return ascii_to_key('4');break;
+  47:Core/Src/key_parse.c ****         case '%':return ascii_to_key('5');break;
+  48:Core/Src/key_parse.c ****         case '^':return ascii_to_key('6');break;
+  49:Core/Src/key_parse.c ****         case '&':return ascii_to_key('7');break;
+  50:Core/Src/key_parse.c ****         case '*':return ascii_to_key('8');break;
+  51:Core/Src/key_parse.c ****         case '(':return ascii_to_key('9');break;
+  52:Core/Src/key_parse.c ****         case ')':return ascii_to_key('0');break;
+  53:Core/Src/key_parse.c ****         case '_':return ascii_to_key('-');break;
+  54:Core/Src/key_parse.c ****         case '+':return ascii_to_key('=');break;
+ARM GAS  /tmp/ccjKiXZ0.s 			page 9
+
+
+  55:Core/Src/key_parse.c ****         case '{':return ascii_to_key('[');break;
+  56:Core/Src/key_parse.c ****         case '}':return ascii_to_key(']');break;
+  57:Core/Src/key_parse.c ****         case ':':return ascii_to_key(';');break;
+  58:Core/Src/key_parse.c ****         case '"':return ascii_to_key(0x27);break;
+  59:Core/Src/key_parse.c ****         case '|':return ascii_to_key(0x5c);break;
+  60:Core/Src/key_parse.c ****         case '<':return ascii_to_key(',');break;
+  61:Core/Src/key_parse.c ****         case '>':return ascii_to_key('.');break;
+  62:Core/Src/key_parse.c ****         case '?':return ascii_to_key('/');break;
+  63:Core/Src/key_parse.c ****         default:return key;
+  64:Core/Src/key_parse.c ****     }
+  65:Core/Src/key_parse.c **** 
+  66:Core/Src/key_parse.c ****     return key;
+  67:Core/Src/key_parse.c **** 
+  68:Core/Src/key_parse.c ****     
+  69:Core/Src/key_parse.c **** 
+  70:Core/Src/key_parse.c **** }
+ 397              		.loc 1 70 1 view .LVU67
+ 398 0072 08BD     		pop	{r3, pc}
+ 399              	.LVL35:
+ 400              	.L31:
+  43:Core/Src/key_parse.c ****         case '@':return ascii_to_key('2');break;
+ 401              		.loc 1 43 43 is_stmt 1 view .LVU68
+  44:Core/Src/key_parse.c ****         case '@':return ascii_to_key('2');break;
+ 402              		.loc 1 44 18 view .LVU69
+  44:Core/Src/key_parse.c ****         case '@':return ascii_to_key('2');break;
+ 403              		.loc 1 44 25 is_stmt 0 view .LVU70
+ 404 0074 3220     		movs	r0, #50
+ 405              	.LVL36:
+  44:Core/Src/key_parse.c ****         case '@':return ascii_to_key('2');break;
+ 406              		.loc 1 44 25 view .LVU71
+ 407 0076 FFF7FEFF 		bl	ascii_to_key
+ 408              	.LVL37:
+ 409 007a FAE7     		b	.L24
+ 410              	.LVL38:
+ 411              	.L43:
+  44:Core/Src/key_parse.c ****         case '@':return ascii_to_key('2');break;
+ 412              		.loc 1 44 43 is_stmt 1 view .LVU72
+  45:Core/Src/key_parse.c ****         case '$':return ascii_to_key('4');break;
+ 413              		.loc 1 45 18 view .LVU73
+  45:Core/Src/key_parse.c ****         case '$':return ascii_to_key('4');break;
+ 414              		.loc 1 45 25 is_stmt 0 view .LVU74
+ 415 007c 3320     		movs	r0, #51
+ 416              	.LVL39:
+  45:Core/Src/key_parse.c ****         case '$':return ascii_to_key('4');break;
+ 417              		.loc 1 45 25 view .LVU75
+ 418 007e FFF7FEFF 		bl	ascii_to_key
+ 419              	.LVL40:
+ 420 0082 F6E7     		b	.L24
+ 421              	.LVL41:
+ 422              	.L42:
+  45:Core/Src/key_parse.c ****         case '$':return ascii_to_key('4');break;
+ 423              		.loc 1 45 43 is_stmt 1 view .LVU76
+  46:Core/Src/key_parse.c ****         case '%':return ascii_to_key('5');break;
+ 424              		.loc 1 46 18 view .LVU77
+  46:Core/Src/key_parse.c ****         case '%':return ascii_to_key('5');break;
+ 425              		.loc 1 46 25 is_stmt 0 view .LVU78
+ 426 0084 3420     		movs	r0, #52
+ARM GAS  /tmp/ccjKiXZ0.s 			page 10
+
+
+ 427              	.LVL42:
+  46:Core/Src/key_parse.c ****         case '%':return ascii_to_key('5');break;
+ 428              		.loc 1 46 25 view .LVU79
+ 429 0086 FFF7FEFF 		bl	ascii_to_key
+ 430              	.LVL43:
+ 431 008a F2E7     		b	.L24
+ 432              	.LVL44:
+ 433              	.L41:
+  46:Core/Src/key_parse.c ****         case '%':return ascii_to_key('5');break;
+ 434              		.loc 1 46 43 is_stmt 1 view .LVU80
+  47:Core/Src/key_parse.c ****         case '^':return ascii_to_key('6');break;
+ 435              		.loc 1 47 18 view .LVU81
+  47:Core/Src/key_parse.c ****         case '^':return ascii_to_key('6');break;
+ 436              		.loc 1 47 25 is_stmt 0 view .LVU82
+ 437 008c 3520     		movs	r0, #53
+ 438              	.LVL45:
+  47:Core/Src/key_parse.c ****         case '^':return ascii_to_key('6');break;
+ 439              		.loc 1 47 25 view .LVU83
+ 440 008e FFF7FEFF 		bl	ascii_to_key
+ 441              	.LVL46:
+ 442 0092 EEE7     		b	.L24
+ 443              	.LVL47:
+ 444              	.L30:
+  47:Core/Src/key_parse.c ****         case '^':return ascii_to_key('6');break;
+ 445              		.loc 1 47 43 is_stmt 1 view .LVU84
+  48:Core/Src/key_parse.c ****         case '&':return ascii_to_key('7');break;
+ 446              		.loc 1 48 18 view .LVU85
+  48:Core/Src/key_parse.c ****         case '&':return ascii_to_key('7');break;
+ 447              		.loc 1 48 25 is_stmt 0 view .LVU86
+ 448 0094 3620     		movs	r0, #54
+ 449              	.LVL48:
+  48:Core/Src/key_parse.c ****         case '&':return ascii_to_key('7');break;
+ 450              		.loc 1 48 25 view .LVU87
+ 451 0096 FFF7FEFF 		bl	ascii_to_key
+ 452              	.LVL49:
+ 453 009a EAE7     		b	.L24
+ 454              	.LVL50:
+ 455              	.L40:
+  48:Core/Src/key_parse.c ****         case '&':return ascii_to_key('7');break;
+ 456              		.loc 1 48 43 is_stmt 1 view .LVU88
+  49:Core/Src/key_parse.c ****         case '*':return ascii_to_key('8');break;
+ 457              		.loc 1 49 18 view .LVU89
+  49:Core/Src/key_parse.c ****         case '*':return ascii_to_key('8');break;
+ 458              		.loc 1 49 25 is_stmt 0 view .LVU90
+ 459 009c 3720     		movs	r0, #55
+ 460              	.LVL51:
+  49:Core/Src/key_parse.c ****         case '*':return ascii_to_key('8');break;
+ 461              		.loc 1 49 25 view .LVU91
+ 462 009e FFF7FEFF 		bl	ascii_to_key
+ 463              	.LVL52:
+ 464 00a2 E6E7     		b	.L24
+ 465              	.LVL53:
+ 466              	.L37:
+  49:Core/Src/key_parse.c ****         case '*':return ascii_to_key('8');break;
+ 467              		.loc 1 49 43 is_stmt 1 view .LVU92
+  50:Core/Src/key_parse.c ****         case '(':return ascii_to_key('9');break;
+ 468              		.loc 1 50 18 view .LVU93
+ARM GAS  /tmp/ccjKiXZ0.s 			page 11
+
+
+  50:Core/Src/key_parse.c ****         case '(':return ascii_to_key('9');break;
+ 469              		.loc 1 50 25 is_stmt 0 view .LVU94
+ 470 00a4 3820     		movs	r0, #56
+ 471              	.LVL54:
+  50:Core/Src/key_parse.c ****         case '(':return ascii_to_key('9');break;
+ 472              		.loc 1 50 25 view .LVU95
+ 473 00a6 FFF7FEFF 		bl	ascii_to_key
+ 474              	.LVL55:
+ 475 00aa E2E7     		b	.L24
+ 476              	.LVL56:
+ 477              	.L39:
+  50:Core/Src/key_parse.c ****         case '(':return ascii_to_key('9');break;
+ 478              		.loc 1 50 43 is_stmt 1 view .LVU96
+  51:Core/Src/key_parse.c ****         case ')':return ascii_to_key('0');break;
+ 479              		.loc 1 51 18 view .LVU97
+  51:Core/Src/key_parse.c ****         case ')':return ascii_to_key('0');break;
+ 480              		.loc 1 51 25 is_stmt 0 view .LVU98
+ 481 00ac 3920     		movs	r0, #57
+ 482              	.LVL57:
+  51:Core/Src/key_parse.c ****         case ')':return ascii_to_key('0');break;
+ 483              		.loc 1 51 25 view .LVU99
+ 484 00ae FFF7FEFF 		bl	ascii_to_key
+ 485              	.LVL58:
+ 486 00b2 DEE7     		b	.L24
+ 487              	.LVL59:
+ 488              	.L38:
+  51:Core/Src/key_parse.c ****         case ')':return ascii_to_key('0');break;
+ 489              		.loc 1 51 43 is_stmt 1 view .LVU100
+  52:Core/Src/key_parse.c ****         case '_':return ascii_to_key('-');break;
+ 490              		.loc 1 52 18 view .LVU101
+  52:Core/Src/key_parse.c ****         case '_':return ascii_to_key('-');break;
+ 491              		.loc 1 52 25 is_stmt 0 view .LVU102
+ 492 00b4 3020     		movs	r0, #48
+ 493              	.LVL60:
+  52:Core/Src/key_parse.c ****         case '_':return ascii_to_key('-');break;
+ 494              		.loc 1 52 25 view .LVU103
+ 495 00b6 FFF7FEFF 		bl	ascii_to_key
+ 496              	.LVL61:
+ 497 00ba DAE7     		b	.L24
+ 498              	.LVL62:
+ 499              	.L29:
+  52:Core/Src/key_parse.c ****         case '_':return ascii_to_key('-');break;
+ 500              		.loc 1 52 43 is_stmt 1 view .LVU104
+  53:Core/Src/key_parse.c ****         case '+':return ascii_to_key('=');break;
+ 501              		.loc 1 53 18 view .LVU105
+  53:Core/Src/key_parse.c ****         case '+':return ascii_to_key('=');break;
+ 502              		.loc 1 53 25 is_stmt 0 view .LVU106
+ 503 00bc 2D20     		movs	r0, #45
+ 504              	.LVL63:
+  53:Core/Src/key_parse.c ****         case '+':return ascii_to_key('=');break;
+ 505              		.loc 1 53 25 view .LVU107
+ 506 00be FFF7FEFF 		bl	ascii_to_key
+ 507              	.LVL64:
+ 508 00c2 D6E7     		b	.L24
+ 509              	.LVL65:
+ 510              	.L36:
+  53:Core/Src/key_parse.c ****         case '+':return ascii_to_key('=');break;
+ARM GAS  /tmp/ccjKiXZ0.s 			page 12
+
+
+ 511              		.loc 1 53 43 is_stmt 1 view .LVU108
+  54:Core/Src/key_parse.c ****         case '{':return ascii_to_key('[');break;
+ 512              		.loc 1 54 18 view .LVU109
+  54:Core/Src/key_parse.c ****         case '{':return ascii_to_key('[');break;
+ 513              		.loc 1 54 25 is_stmt 0 view .LVU110
+ 514 00c4 3D20     		movs	r0, #61
+ 515              	.LVL66:
+  54:Core/Src/key_parse.c ****         case '{':return ascii_to_key('[');break;
+ 516              		.loc 1 54 25 view .LVU111
+ 517 00c6 FFF7FEFF 		bl	ascii_to_key
+ 518              	.LVL67:
+ 519 00ca D2E7     		b	.L24
+ 520              	.LVL68:
+ 521              	.L28:
+  54:Core/Src/key_parse.c ****         case '{':return ascii_to_key('[');break;
+ 522              		.loc 1 54 43 is_stmt 1 view .LVU112
+  55:Core/Src/key_parse.c ****         case '}':return ascii_to_key(']');break;
+ 523              		.loc 1 55 18 view .LVU113
+  55:Core/Src/key_parse.c ****         case '}':return ascii_to_key(']');break;
+ 524              		.loc 1 55 25 is_stmt 0 view .LVU114
+ 525 00cc 5B20     		movs	r0, #91
+ 526              	.LVL69:
+  55:Core/Src/key_parse.c ****         case '}':return ascii_to_key(']');break;
+ 527              		.loc 1 55 25 view .LVU115
+ 528 00ce FFF7FEFF 		bl	ascii_to_key
+ 529              	.LVL70:
+ 530 00d2 CEE7     		b	.L24
+ 531              	.LVL71:
+ 532              	.L25:
+  55:Core/Src/key_parse.c ****         case '}':return ascii_to_key(']');break;
+ 533              		.loc 1 55 43 is_stmt 1 view .LVU116
+  56:Core/Src/key_parse.c ****         case ':':return ascii_to_key(';');break;
+ 534              		.loc 1 56 18 view .LVU117
+  56:Core/Src/key_parse.c ****         case ':':return ascii_to_key(';');break;
+ 535              		.loc 1 56 25 is_stmt 0 view .LVU118
+ 536 00d4 5D20     		movs	r0, #93
+ 537              	.LVL72:
+  56:Core/Src/key_parse.c ****         case ':':return ascii_to_key(';');break;
+ 538              		.loc 1 56 25 view .LVU119
+ 539 00d6 FFF7FEFF 		bl	ascii_to_key
+ 540              	.LVL73:
+ 541 00da CAE7     		b	.L24
+ 542              	.LVL74:
+ 543              	.L35:
+  56:Core/Src/key_parse.c ****         case ':':return ascii_to_key(';');break;
+ 544              		.loc 1 56 43 is_stmt 1 view .LVU120
+  57:Core/Src/key_parse.c ****         case '"':return ascii_to_key(0x27);break;
+ 545              		.loc 1 57 18 view .LVU121
+  57:Core/Src/key_parse.c ****         case '"':return ascii_to_key(0x27);break;
+ 546              		.loc 1 57 25 is_stmt 0 view .LVU122
+ 547 00dc 3B20     		movs	r0, #59
+ 548              	.LVL75:
+  57:Core/Src/key_parse.c ****         case '"':return ascii_to_key(0x27);break;
+ 549              		.loc 1 57 25 view .LVU123
+ 550 00de FFF7FEFF 		bl	ascii_to_key
+ 551              	.LVL76:
+ 552 00e2 C6E7     		b	.L24
+ARM GAS  /tmp/ccjKiXZ0.s 			page 13
+
+
+ 553              	.LVL77:
+ 554              	.L44:
+  57:Core/Src/key_parse.c ****         case '"':return ascii_to_key(0x27);break;
+ 555              		.loc 1 57 43 is_stmt 1 view .LVU124
+  58:Core/Src/key_parse.c ****         case '|':return ascii_to_key(0x5c);break;
+ 556              		.loc 1 58 18 view .LVU125
+  58:Core/Src/key_parse.c ****         case '|':return ascii_to_key(0x5c);break;
+ 557              		.loc 1 58 25 is_stmt 0 view .LVU126
+ 558 00e4 2720     		movs	r0, #39
+ 559              	.LVL78:
+  58:Core/Src/key_parse.c ****         case '|':return ascii_to_key(0x5c);break;
+ 560              		.loc 1 58 25 view .LVU127
+ 561 00e6 FFF7FEFF 		bl	ascii_to_key
+ 562              	.LVL79:
+ 563 00ea C2E7     		b	.L24
+ 564              	.LVL80:
+ 565              	.L27:
+  58:Core/Src/key_parse.c ****         case '|':return ascii_to_key(0x5c);break;
+ 566              		.loc 1 58 44 is_stmt 1 view .LVU128
+  59:Core/Src/key_parse.c ****         case '<':return ascii_to_key(',');break;
+ 567              		.loc 1 59 18 view .LVU129
+  59:Core/Src/key_parse.c ****         case '<':return ascii_to_key(',');break;
+ 568              		.loc 1 59 25 is_stmt 0 view .LVU130
+ 569 00ec 5C20     		movs	r0, #92
+ 570              	.LVL81:
+  59:Core/Src/key_parse.c ****         case '<':return ascii_to_key(',');break;
+ 571              		.loc 1 59 25 view .LVU131
+ 572 00ee FFF7FEFF 		bl	ascii_to_key
+ 573              	.LVL82:
+ 574 00f2 BEE7     		b	.L24
+ 575              	.LVL83:
+ 576              	.L34:
+  59:Core/Src/key_parse.c ****         case '<':return ascii_to_key(',');break;
+ 577              		.loc 1 59 44 is_stmt 1 view .LVU132
+  60:Core/Src/key_parse.c ****         case '>':return ascii_to_key('.');break;
+ 578              		.loc 1 60 18 view .LVU133
+  60:Core/Src/key_parse.c ****         case '>':return ascii_to_key('.');break;
+ 579              		.loc 1 60 25 is_stmt 0 view .LVU134
+ 580 00f4 2C20     		movs	r0, #44
+ 581              	.LVL84:
+  60:Core/Src/key_parse.c ****         case '>':return ascii_to_key('.');break;
+ 582              		.loc 1 60 25 view .LVU135
+ 583 00f6 FFF7FEFF 		bl	ascii_to_key
+ 584              	.LVL85:
+ 585 00fa BAE7     		b	.L24
+ 586              	.LVL86:
+ 587              	.L33:
+  60:Core/Src/key_parse.c ****         case '>':return ascii_to_key('.');break;
+ 588              		.loc 1 60 43 is_stmt 1 view .LVU136
+  61:Core/Src/key_parse.c ****         case '?':return ascii_to_key('/');break;
+ 589              		.loc 1 61 18 view .LVU137
+  61:Core/Src/key_parse.c ****         case '?':return ascii_to_key('/');break;
+ 590              		.loc 1 61 25 is_stmt 0 view .LVU138
+ 591 00fc 2E20     		movs	r0, #46
+ 592              	.LVL87:
+  61:Core/Src/key_parse.c ****         case '?':return ascii_to_key('/');break;
+ 593              		.loc 1 61 25 view .LVU139
+ARM GAS  /tmp/ccjKiXZ0.s 			page 14
+
+
+ 594 00fe FFF7FEFF 		bl	ascii_to_key
+ 595              	.LVL88:
+ 596 0102 B6E7     		b	.L24
+ 597              	.LVL89:
+ 598              	.L32:
+  61:Core/Src/key_parse.c ****         case '?':return ascii_to_key('/');break;
+ 599              		.loc 1 61 43 is_stmt 1 view .LVU140
+  62:Core/Src/key_parse.c ****         default:return key;
+ 600              		.loc 1 62 18 view .LVU141
+  62:Core/Src/key_parse.c ****         default:return key;
+ 601              		.loc 1 62 25 is_stmt 0 view .LVU142
+ 602 0104 2F20     		movs	r0, #47
+ 603              	.LVL90:
+  62:Core/Src/key_parse.c ****         default:return key;
+ 604              		.loc 1 62 25 view .LVU143
+ 605 0106 FFF7FEFF 		bl	ascii_to_key
+ 606              	.LVL91:
+ 607 010a B2E7     		b	.L24
+ 608              		.cfi_endproc
+ 609              	.LFE135:
+ 611              		.section	.text.key_press,"ax",%progbits
+ 612              		.align	1
+ 613              		.global	key_press
+ 614              		.syntax unified
+ 615              		.thumb
+ 616              		.thumb_func
+ 617              		.fpu fpv4-sp-d16
+ 619              	key_press:
+ 620              	.LVL92:
+ 621              	.LFB137:
+  71:Core/Src/key_parse.c **** void key_print(unsigned char *string){
+  72:Core/Src/key_parse.c **** /*
+  73:Core/Src/key_parse.c **** 输出字符    abcd@@abd@a
+  74:Core/Src/key_parse.c **** */
+  75:Core/Src/key_parse.c ****     unsigned int i,j,nextKey,temp;
+  76:Core/Src/key_parse.c ****     i=0;
+  77:Core/Src/key_parse.c ****     j=0;
+  78:Core/Src/key_parse.c ****     while(string[i]!='\0'){ 
+  79:Core/Src/key_parse.c ****         temp=ascii_to_key(string[i]);
+  80:Core/Src/key_parse.c ****         nextKey=ascii_to_key(string[i+1]);
+  81:Core/Src/key_parse.c ****         if(temp){
+  82:Core/Src/key_parse.c ****             key_data[2+j]=temp;
+  83:Core/Src/key_parse.c ****             j++;
+  84:Core/Src/key_parse.c ****             if(j==6){
+  85:Core/Src/key_parse.c ****                 j=0;
+  86:Core/Src/key_parse.c ****                 USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+  87:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+  88:Core/Src/key_parse.c ****                 key_unpress_all();
+  89:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+  90:Core/Src/key_parse.c ****             }else if(!nextKey||parse_key(nextKey)==temp){
+  91:Core/Src/key_parse.c ****                 j=0;
+  92:Core/Src/key_parse.c ****                 USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+  93:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+  94:Core/Src/key_parse.c ****                 key_unpress_all();
+  95:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+  96:Core/Src/key_parse.c ****             }
+  97:Core/Src/key_parse.c ****         }else{
+ARM GAS  /tmp/ccjKiXZ0.s 			page 15
+
+
+  98:Core/Src/key_parse.c ****             temp=parse_key(string[i]);
+  99:Core/Src/key_parse.c ****             key_data[2+0]=temp;
+ 100:Core/Src/key_parse.c ****             j++;
+ 101:Core/Src/key_parse.c ****             if(j==6){
+ 102:Core/Src/key_parse.c ****                 j=0;
+ 103:Core/Src/key_parse.c ****                 key_data[0]=KEY_SHIFT;
+ 104:Core/Src/key_parse.c ****                 USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 105:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 106:Core/Src/key_parse.c ****                 key_unpress_all();
+ 107:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 108:Core/Src/key_parse.c ****             }else if(nextKey||nextKey==temp){
+ 109:Core/Src/key_parse.c ****                 j=0;
+ 110:Core/Src/key_parse.c ****                 key_data[0]=KEY_SHIFT;
+ 111:Core/Src/key_parse.c ****                 USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 112:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 113:Core/Src/key_parse.c ****                 key_unpress_all();
+ 114:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 115:Core/Src/key_parse.c ****             }
+ 116:Core/Src/key_parse.c ****         }
+ 117:Core/Src/key_parse.c ****         i++;
+ 118:Core/Src/key_parse.c ****         //if(string[i]=='\0') return;
+ 119:Core/Src/key_parse.c ****     }
+ 120:Core/Src/key_parse.c **** }
+ 121:Core/Src/key_parse.c **** 
+ 122:Core/Src/key_parse.c **** void key_press(unsigned char key){
+ 622              		.loc 1 122 34 is_stmt 1 view -0
+ 623              		.cfi_startproc
+ 624              		@ args = 0, pretend = 0, frame = 0
+ 625              		@ frame_needed = 0, uses_anonymous_args = 0
+ 626              		.loc 1 122 34 is_stmt 0 view .LVU145
+ 627 0000 08B5     		push	{r3, lr}
+ 628              	.LCFI1:
+ 629              		.cfi_def_cfa_offset 8
+ 630              		.cfi_offset 3, -8
+ 631              		.cfi_offset 14, -4
+ 123:Core/Src/key_parse.c **** /*
+ 124:Core/Src/key_parse.c **** 按下功能键盘
+ 125:Core/Src/key_parse.c **** */
+ 126:Core/Src/key_parse.c ****     key_data[0]=key;
+ 632              		.loc 1 126 5 is_stmt 1 view .LVU146
+ 633              		.loc 1 126 16 is_stmt 0 view .LVU147
+ 634 0002 0549     		ldr	r1, .L49
+ 635 0004 0870     		strb	r0, [r1]
+ 127:Core/Src/key_parse.c ****     USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 636              		.loc 1 127 5 is_stmt 1 view .LVU148
+ 637 0006 0822     		movs	r2, #8
+ 638 0008 0448     		ldr	r0, .L49+4
+ 639              	.LVL93:
+ 640              		.loc 1 127 5 is_stmt 0 view .LVU149
+ 641 000a FFF7FEFF 		bl	USBD_HID_SendReport
+ 642              	.LVL94:
+ 128:Core/Src/key_parse.c ****     HAL_Delay(KEY_DELAY);
+ 643              		.loc 1 128 5 is_stmt 1 view .LVU150
+ 644 000e 1920     		movs	r0, #25
+ 645 0010 FFF7FEFF 		bl	HAL_Delay
+ 646              	.LVL95:
+ 129:Core/Src/key_parse.c **** }
+ARM GAS  /tmp/ccjKiXZ0.s 			page 16
+
+
+ 647              		.loc 1 129 1 is_stmt 0 view .LVU151
+ 648 0014 08BD     		pop	{r3, pc}
+ 649              	.L50:
+ 650 0016 00BF     		.align	2
+ 651              	.L49:
+ 652 0018 00000000 		.word	.LANCHOR0
+ 653 001c 00000000 		.word	hUsbDeviceFS
+ 654              		.cfi_endproc
+ 655              	.LFE137:
+ 657              		.section	.text.key_unpress,"ax",%progbits
+ 658              		.align	1
+ 659              		.global	key_unpress
+ 660              		.syntax unified
+ 661              		.thumb
+ 662              		.thumb_func
+ 663              		.fpu fpv4-sp-d16
+ 665              	key_unpress:
+ 666              	.LFB138:
+ 130:Core/Src/key_parse.c **** void key_unpress(void){
+ 667              		.loc 1 130 23 is_stmt 1 view -0
+ 668              		.cfi_startproc
+ 669              		@ args = 0, pretend = 0, frame = 0
+ 670              		@ frame_needed = 0, uses_anonymous_args = 0
+ 671 0000 08B5     		push	{r3, lr}
+ 672              	.LCFI2:
+ 673              		.cfi_def_cfa_offset 8
+ 674              		.cfi_offset 3, -8
+ 675              		.cfi_offset 14, -4
+ 131:Core/Src/key_parse.c **** /*
+ 132:Core/Src/key_parse.c **** 弹起功能键盘
+ 133:Core/Src/key_parse.c **** */
+ 134:Core/Src/key_parse.c ****     key_data[0]=0x00;
+ 676              		.loc 1 134 5 view .LVU153
+ 677              		.loc 1 134 16 is_stmt 0 view .LVU154
+ 678 0002 0449     		ldr	r1, .L53
+ 679 0004 0023     		movs	r3, #0
+ 680 0006 0B70     		strb	r3, [r1]
+ 135:Core/Src/key_parse.c ****     USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 681              		.loc 1 135 5 is_stmt 1 view .LVU155
+ 682 0008 0822     		movs	r2, #8
+ 683 000a 0348     		ldr	r0, .L53+4
+ 684 000c FFF7FEFF 		bl	USBD_HID_SendReport
+ 685              	.LVL96:
+ 136:Core/Src/key_parse.c **** }
+ 686              		.loc 1 136 1 is_stmt 0 view .LVU156
+ 687 0010 08BD     		pop	{r3, pc}
+ 688              	.L54:
+ 689 0012 00BF     		.align	2
+ 690              	.L53:
+ 691 0014 00000000 		.word	.LANCHOR0
+ 692 0018 00000000 		.word	hUsbDeviceFS
+ 693              		.cfi_endproc
+ 694              	.LFE138:
+ 696              		.section	.text.key_unpress_all,"ax",%progbits
+ 697              		.align	1
+ 698              		.global	key_unpress_all
+ 699              		.syntax unified
+ARM GAS  /tmp/ccjKiXZ0.s 			page 17
+
+
+ 700              		.thumb
+ 701              		.thumb_func
+ 702              		.fpu fpv4-sp-d16
+ 704              	key_unpress_all:
+ 705              	.LFB139:
+ 137:Core/Src/key_parse.c **** void key_unpress_all(void){
+ 706              		.loc 1 137 27 is_stmt 1 view -0
+ 707              		.cfi_startproc
+ 708              		@ args = 0, pretend = 0, frame = 0
+ 709              		@ frame_needed = 0, uses_anonymous_args = 0
+ 710 0000 08B5     		push	{r3, lr}
+ 711              	.LCFI3:
+ 712              		.cfi_def_cfa_offset 8
+ 713              		.cfi_offset 3, -8
+ 714              		.cfi_offset 14, -4
+ 138:Core/Src/key_parse.c **** /*
+ 139:Core/Src/key_parse.c **** 弹起所有键
+ 140:Core/Src/key_parse.c **** */
+ 141:Core/Src/key_parse.c ****     for(unsigned char i=0;i<8;i++){
+ 715              		.loc 1 141 5 view .LVU158
+ 716              	.LBB2:
+ 717              		.loc 1 141 9 view .LVU159
+ 718              	.LVL97:
+ 719              		.loc 1 141 23 is_stmt 0 view .LVU160
+ 720 0002 0023     		movs	r3, #0
+ 721              		.loc 1 141 5 view .LVU161
+ 722 0004 04E0     		b	.L56
+ 723              	.LVL98:
+ 724              	.L57:
+ 142:Core/Src/key_parse.c ****         key_data[i]=0x00;
+ 725              		.loc 1 142 9 is_stmt 1 discriminator 3 view .LVU162
+ 726              		.loc 1 142 20 is_stmt 0 discriminator 3 view .LVU163
+ 727 0006 064A     		ldr	r2, .L59
+ 728 0008 0021     		movs	r1, #0
+ 729 000a D154     		strb	r1, [r2, r3]
+ 141:Core/Src/key_parse.c ****         key_data[i]=0x00;
+ 730              		.loc 1 141 31 is_stmt 1 discriminator 3 view .LVU164
+ 141:Core/Src/key_parse.c ****         key_data[i]=0x00;
+ 731              		.loc 1 141 32 is_stmt 0 discriminator 3 view .LVU165
+ 732 000c 0133     		adds	r3, r3, #1
+ 733              	.LVL99:
+ 141:Core/Src/key_parse.c ****         key_data[i]=0x00;
+ 734              		.loc 1 141 32 discriminator 3 view .LVU166
+ 735 000e DBB2     		uxtb	r3, r3
+ 736              	.LVL100:
+ 737              	.L56:
+ 141:Core/Src/key_parse.c ****         key_data[i]=0x00;
+ 738              		.loc 1 141 27 is_stmt 1 discriminator 1 view .LVU167
+ 141:Core/Src/key_parse.c ****         key_data[i]=0x00;
+ 739              		.loc 1 141 5 is_stmt 0 discriminator 1 view .LVU168
+ 740 0010 072B     		cmp	r3, #7
+ 741 0012 F8D9     		bls	.L57
+ 742              	.LBE2:
+ 143:Core/Src/key_parse.c ****     }
+ 144:Core/Src/key_parse.c ****     USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 743              		.loc 1 144 5 is_stmt 1 view .LVU169
+ 744 0014 0822     		movs	r2, #8
+ARM GAS  /tmp/ccjKiXZ0.s 			page 18
+
+
+ 745 0016 0249     		ldr	r1, .L59
+ 746 0018 0248     		ldr	r0, .L59+4
+ 747 001a FFF7FEFF 		bl	USBD_HID_SendReport
+ 748              	.LVL101:
+ 145:Core/Src/key_parse.c **** }
+ 749              		.loc 1 145 1 is_stmt 0 view .LVU170
+ 750 001e 08BD     		pop	{r3, pc}
+ 751              	.L60:
+ 752              		.align	2
+ 753              	.L59:
+ 754 0020 00000000 		.word	.LANCHOR0
+ 755 0024 00000000 		.word	hUsbDeviceFS
+ 756              		.cfi_endproc
+ 757              	.LFE139:
+ 759              		.section	.text.key_print,"ax",%progbits
+ 760              		.align	1
+ 761              		.global	key_print
+ 762              		.syntax unified
+ 763              		.thumb
+ 764              		.thumb_func
+ 765              		.fpu fpv4-sp-d16
+ 767              	key_print:
+ 768              	.LVL102:
+ 769              	.LFB136:
+  71:Core/Src/key_parse.c **** /*
+ 770              		.loc 1 71 38 is_stmt 1 view -0
+ 771              		.cfi_startproc
+ 772              		@ args = 0, pretend = 0, frame = 0
+ 773              		@ frame_needed = 0, uses_anonymous_args = 0
+  71:Core/Src/key_parse.c **** /*
+ 774              		.loc 1 71 38 is_stmt 0 view .LVU172
+ 775 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 776              	.LCFI4:
+ 777              		.cfi_def_cfa_offset 32
+ 778              		.cfi_offset 3, -32
+ 779              		.cfi_offset 4, -28
+ 780              		.cfi_offset 5, -24
+ 781              		.cfi_offset 6, -20
+ 782              		.cfi_offset 7, -16
+ 783              		.cfi_offset 8, -12
+ 784              		.cfi_offset 9, -8
+ 785              		.cfi_offset 14, -4
+ 786 0004 8146     		mov	r9, r0
+  75:Core/Src/key_parse.c ****     i=0;
+ 787              		.loc 1 75 5 is_stmt 1 view .LVU173
+  76:Core/Src/key_parse.c ****     j=0;
+ 788              		.loc 1 76 5 view .LVU174
+ 789              	.LVL103:
+  77:Core/Src/key_parse.c ****     while(string[i]!='\0'){ 
+ 790              		.loc 1 77 5 view .LVU175
+  78:Core/Src/key_parse.c ****         temp=ascii_to_key(string[i]);
+ 791              		.loc 1 78 5 view .LVU176
+  77:Core/Src/key_parse.c ****     while(string[i]!='\0'){ 
+ 792              		.loc 1 77 6 is_stmt 0 view .LVU177
+ 793 0006 0025     		movs	r5, #0
+  76:Core/Src/key_parse.c ****     j=0;
+ 794              		.loc 1 76 6 view .LVU178
+ARM GAS  /tmp/ccjKiXZ0.s 			page 19
+
+
+ 795 0008 2F46     		mov	r7, r5
+  78:Core/Src/key_parse.c ****         temp=ascii_to_key(string[i]);
+ 796              		.loc 1 78 10 view .LVU179
+ 797 000a 1CE0     		b	.L62
+ 798              	.LVL104:
+ 799              	.L72:
+  85:Core/Src/key_parse.c ****                 USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 800              		.loc 1 85 17 is_stmt 1 view .LVU180
+  86:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 801              		.loc 1 86 17 view .LVU181
+ 802 000c 0822     		movs	r2, #8
+ 803 000e 3449     		ldr	r1, .L74
+ 804 0010 3448     		ldr	r0, .L74+4
+ 805              	.LVL105:
+  86:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 806              		.loc 1 86 17 is_stmt 0 view .LVU182
+ 807 0012 FFF7FEFF 		bl	USBD_HID_SendReport
+ 808              	.LVL106:
+  87:Core/Src/key_parse.c ****                 key_unpress_all();
+ 809              		.loc 1 87 17 is_stmt 1 view .LVU183
+ 810 0016 1920     		movs	r0, #25
+ 811 0018 FFF7FEFF 		bl	HAL_Delay
+ 812              	.LVL107:
+  88:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 813              		.loc 1 88 17 view .LVU184
+ 814 001c FFF7FEFF 		bl	key_unpress_all
+ 815              	.LVL108:
+  89:Core/Src/key_parse.c ****             }else if(!nextKey||parse_key(nextKey)==temp){
+ 816              		.loc 1 89 17 view .LVU185
+ 817 0020 1920     		movs	r0, #25
+ 818 0022 FFF7FEFF 		bl	HAL_Delay
+ 819              	.LVL109:
+  85:Core/Src/key_parse.c ****                 USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 820              		.loc 1 85 18 is_stmt 0 view .LVU186
+ 821 0026 0025     		movs	r5, #0
+ 822 0028 0DE0     		b	.L62
+ 823              	.LVL110:
+ 824              	.L66:
+  91:Core/Src/key_parse.c ****                 USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 825              		.loc 1 91 17 is_stmt 1 view .LVU187
+  92:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 826              		.loc 1 92 17 view .LVU188
+ 827 002a 0822     		movs	r2, #8
+ 828 002c 2C49     		ldr	r1, .L74
+ 829 002e 2D48     		ldr	r0, .L74+4
+ 830 0030 FFF7FEFF 		bl	USBD_HID_SendReport
+ 831              	.LVL111:
+  93:Core/Src/key_parse.c ****                 key_unpress_all();
+ 832              		.loc 1 93 17 view .LVU189
+ 833 0034 1920     		movs	r0, #25
+ 834 0036 FFF7FEFF 		bl	HAL_Delay
+ 835              	.LVL112:
+  94:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 836              		.loc 1 94 17 view .LVU190
+ 837 003a FFF7FEFF 		bl	key_unpress_all
+ 838              	.LVL113:
+  95:Core/Src/key_parse.c ****             }
+ARM GAS  /tmp/ccjKiXZ0.s 			page 20
+
+
+ 839              		.loc 1 95 17 view .LVU191
+ 840 003e 1920     		movs	r0, #25
+ 841 0040 FFF7FEFF 		bl	HAL_Delay
+ 842              	.LVL114:
+  91:Core/Src/key_parse.c ****                 USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 843              		.loc 1 91 18 is_stmt 0 view .LVU192
+ 844 0044 0025     		movs	r5, #0
+ 845              	.LVL115:
+ 846              	.L62:
+  78:Core/Src/key_parse.c ****         temp=ascii_to_key(string[i]);
+ 847              		.loc 1 78 10 is_stmt 1 view .LVU193
+  78:Core/Src/key_parse.c ****         temp=ascii_to_key(string[i]);
+ 848              		.loc 1 78 17 is_stmt 0 view .LVU194
+ 849 0046 19F80780 		ldrb	r8, [r9, r7]	@ zero_extendqisi2
+  78:Core/Src/key_parse.c ****         temp=ascii_to_key(string[i]);
+ 850              		.loc 1 78 10 view .LVU195
+ 851 004a B8F1000F 		cmp	r8, #0
+ 852 004e 44D0     		beq	.L71
+  79:Core/Src/key_parse.c ****         nextKey=ascii_to_key(string[i+1]);
+ 853              		.loc 1 79 9 is_stmt 1 view .LVU196
+  79:Core/Src/key_parse.c ****         nextKey=ascii_to_key(string[i+1]);
+ 854              		.loc 1 79 14 is_stmt 0 view .LVU197
+ 855 0050 4046     		mov	r0, r8
+ 856 0052 FFF7FEFF 		bl	ascii_to_key
+ 857              	.LVL116:
+ 858 0056 0446     		mov	r4, r0
+ 859              	.LVL117:
+  80:Core/Src/key_parse.c ****         if(temp){
+ 860              		.loc 1 80 9 is_stmt 1 view .LVU198
+  80:Core/Src/key_parse.c ****         if(temp){
+ 861              		.loc 1 80 36 is_stmt 0 view .LVU199
+ 862 0058 0137     		adds	r7, r7, #1
+ 863              	.LVL118:
+  80:Core/Src/key_parse.c ****         if(temp){
+ 864              		.loc 1 80 17 view .LVU200
+ 865 005a 19F80700 		ldrb	r0, [r9, r7]	@ zero_extendqisi2
+ 866              	.LVL119:
+  80:Core/Src/key_parse.c ****         if(temp){
+ 867              		.loc 1 80 17 view .LVU201
+ 868 005e FFF7FEFF 		bl	ascii_to_key
+ 869              	.LVL120:
+ 870 0062 0646     		mov	r6, r0
+ 871              	.LVL121:
+  81:Core/Src/key_parse.c ****             key_data[2+j]=temp;
+ 872              		.loc 1 81 9 is_stmt 1 view .LVU202
+  81:Core/Src/key_parse.c ****             key_data[2+j]=temp;
+ 873              		.loc 1 81 11 is_stmt 0 view .LVU203
+ 874 0064 64B1     		cbz	r4, .L63
+  82:Core/Src/key_parse.c ****             j++;
+ 875              		.loc 1 82 13 is_stmt 1 view .LVU204
+  82:Core/Src/key_parse.c ****             j++;
+ 876              		.loc 1 82 23 is_stmt 0 view .LVU205
+ 877 0066 AB1C     		adds	r3, r5, #2
+  82:Core/Src/key_parse.c ****             j++;
+ 878              		.loc 1 82 26 view .LVU206
+ 879 0068 1D4A     		ldr	r2, .L74
+ 880 006a D454     		strb	r4, [r2, r3]
+ARM GAS  /tmp/ccjKiXZ0.s 			page 21
+
+
+  83:Core/Src/key_parse.c ****             if(j==6){
+ 881              		.loc 1 83 13 is_stmt 1 view .LVU207
+  83:Core/Src/key_parse.c ****             if(j==6){
+ 882              		.loc 1 83 14 is_stmt 0 view .LVU208
+ 883 006c 0135     		adds	r5, r5, #1
+ 884              	.LVL122:
+  84:Core/Src/key_parse.c ****                 j=0;
+ 885              		.loc 1 84 13 is_stmt 1 view .LVU209
+  84:Core/Src/key_parse.c ****                 j=0;
+ 886              		.loc 1 84 15 is_stmt 0 view .LVU210
+ 887 006e 062D     		cmp	r5, #6
+ 888 0070 CCD0     		beq	.L72
+  90:Core/Src/key_parse.c ****                 j=0;
+ 889              		.loc 1 90 19 is_stmt 1 view .LVU211
+  90:Core/Src/key_parse.c ****                 j=0;
+ 890              		.loc 1 90 21 is_stmt 0 view .LVU212
+ 891 0072 0028     		cmp	r0, #0
+ 892 0074 D9D0     		beq	.L66
+  90:Core/Src/key_parse.c ****                 j=0;
+ 893              		.loc 1 90 32 discriminator 1 view .LVU213
+ 894 0076 FFF7FEFF 		bl	parse_key
+ 895              	.LVL123:
+  90:Core/Src/key_parse.c ****                 j=0;
+ 896              		.loc 1 90 30 discriminator 1 view .LVU214
+ 897 007a 8442     		cmp	r4, r0
+ 898 007c E3D1     		bne	.L62
+ 899 007e D4E7     		b	.L66
+ 900              	.LVL124:
+ 901              	.L63:
+  98:Core/Src/key_parse.c ****             key_data[2+0]=temp;
+ 902              		.loc 1 98 13 is_stmt 1 view .LVU215
+  98:Core/Src/key_parse.c ****             key_data[2+0]=temp;
+ 903              		.loc 1 98 18 is_stmt 0 view .LVU216
+ 904 0080 4046     		mov	r0, r8
+ 905              	.LVL125:
+  98:Core/Src/key_parse.c ****             key_data[2+0]=temp;
+ 906              		.loc 1 98 18 view .LVU217
+ 907 0082 FFF7FEFF 		bl	parse_key
+ 908              	.LVL126:
+  99:Core/Src/key_parse.c ****             j++;
+ 909              		.loc 1 99 13 is_stmt 1 view .LVU218
+  99:Core/Src/key_parse.c ****             j++;
+ 910              		.loc 1 99 26 is_stmt 0 view .LVU219
+ 911 0086 164B     		ldr	r3, .L74
+ 912 0088 9870     		strb	r0, [r3, #2]
+ 100:Core/Src/key_parse.c ****             if(j==6){
+ 913              		.loc 1 100 13 is_stmt 1 view .LVU220
+ 100:Core/Src/key_parse.c ****             if(j==6){
+ 914              		.loc 1 100 14 is_stmt 0 view .LVU221
+ 915 008a 0135     		adds	r5, r5, #1
+ 916              	.LVL127:
+ 101:Core/Src/key_parse.c ****                 j=0;
+ 917              		.loc 1 101 13 is_stmt 1 view .LVU222
+ 101:Core/Src/key_parse.c ****                 j=0;
+ 918              		.loc 1 101 15 is_stmt 0 view .LVU223
+ 919 008c 062D     		cmp	r5, #6
+ 920 008e 13D0     		beq	.L73
+ARM GAS  /tmp/ccjKiXZ0.s 			page 22
+
+
+ 108:Core/Src/key_parse.c ****                 j=0;
+ 921              		.loc 1 108 19 is_stmt 1 view .LVU224
+ 108:Core/Src/key_parse.c ****                 j=0;
+ 922              		.loc 1 108 21 is_stmt 0 view .LVU225
+ 923 0090 0EB9     		cbnz	r6, .L68
+ 108:Core/Src/key_parse.c ****                 j=0;
+ 924              		.loc 1 108 29 discriminator 1 view .LVU226
+ 925 0092 8642     		cmp	r6, r0
+ 926 0094 D7D1     		bne	.L62
+ 927              	.L68:
+ 109:Core/Src/key_parse.c ****                 key_data[0]=KEY_SHIFT;
+ 928              		.loc 1 109 17 is_stmt 1 view .LVU227
+ 929              	.LVL128:
+ 110:Core/Src/key_parse.c ****                 USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 930              		.loc 1 110 17 view .LVU228
+ 110:Core/Src/key_parse.c ****                 USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 931              		.loc 1 110 28 is_stmt 0 view .LVU229
+ 932 0096 1249     		ldr	r1, .L74
+ 933 0098 2023     		movs	r3, #32
+ 934 009a 0B70     		strb	r3, [r1]
+ 111:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 935              		.loc 1 111 17 is_stmt 1 view .LVU230
+ 936 009c 0822     		movs	r2, #8
+ 937 009e 1148     		ldr	r0, .L74+4
+ 938              	.LVL129:
+ 111:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 939              		.loc 1 111 17 is_stmt 0 view .LVU231
+ 940 00a0 FFF7FEFF 		bl	USBD_HID_SendReport
+ 941              	.LVL130:
+ 112:Core/Src/key_parse.c ****                 key_unpress_all();
+ 942              		.loc 1 112 17 is_stmt 1 view .LVU232
+ 943 00a4 1920     		movs	r0, #25
+ 944 00a6 FFF7FEFF 		bl	HAL_Delay
+ 945              	.LVL131:
+ 113:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 946              		.loc 1 113 17 view .LVU233
+ 947 00aa FFF7FEFF 		bl	key_unpress_all
+ 948              	.LVL132:
+ 114:Core/Src/key_parse.c ****             }
+ 949              		.loc 1 114 17 view .LVU234
+ 950 00ae 1920     		movs	r0, #25
+ 951 00b0 FFF7FEFF 		bl	HAL_Delay
+ 952              	.LVL133:
+ 109:Core/Src/key_parse.c ****                 key_data[0]=KEY_SHIFT;
+ 953              		.loc 1 109 18 is_stmt 0 view .LVU235
+ 954 00b4 2546     		mov	r5, r4
+ 955 00b6 C6E7     		b	.L62
+ 956              	.LVL134:
+ 957              	.L73:
+ 102:Core/Src/key_parse.c ****                 key_data[0]=KEY_SHIFT;
+ 958              		.loc 1 102 17 is_stmt 1 view .LVU236
+ 103:Core/Src/key_parse.c ****                 USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 959              		.loc 1 103 17 view .LVU237
+ 103:Core/Src/key_parse.c ****                 USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 960              		.loc 1 103 28 is_stmt 0 view .LVU238
+ 961 00b8 1946     		mov	r1, r3
+ 962 00ba 2023     		movs	r3, #32
+ARM GAS  /tmp/ccjKiXZ0.s 			page 23
+
+
+ 963 00bc 0B70     		strb	r3, [r1]
+ 104:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 964              		.loc 1 104 17 is_stmt 1 view .LVU239
+ 965 00be 0822     		movs	r2, #8
+ 966 00c0 0848     		ldr	r0, .L74+4
+ 967              	.LVL135:
+ 104:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 968              		.loc 1 104 17 is_stmt 0 view .LVU240
+ 969 00c2 FFF7FEFF 		bl	USBD_HID_SendReport
+ 970              	.LVL136:
+ 105:Core/Src/key_parse.c ****                 key_unpress_all();
+ 971              		.loc 1 105 17 is_stmt 1 view .LVU241
+ 972 00c6 1920     		movs	r0, #25
+ 973 00c8 FFF7FEFF 		bl	HAL_Delay
+ 974              	.LVL137:
+ 106:Core/Src/key_parse.c ****                 HAL_Delay(KEY_DELAY);
+ 975              		.loc 1 106 17 view .LVU242
+ 976 00cc FFF7FEFF 		bl	key_unpress_all
+ 977              	.LVL138:
+ 107:Core/Src/key_parse.c ****             }else if(nextKey||nextKey==temp){
+ 978              		.loc 1 107 17 view .LVU243
+ 979 00d0 1920     		movs	r0, #25
+ 980 00d2 FFF7FEFF 		bl	HAL_Delay
+ 981              	.LVL139:
+ 102:Core/Src/key_parse.c ****                 key_data[0]=KEY_SHIFT;
+ 982              		.loc 1 102 18 is_stmt 0 view .LVU244
+ 983 00d6 2546     		mov	r5, r4
+ 984 00d8 B5E7     		b	.L62
+ 985              	.LVL140:
+ 986              	.L71:
+ 120:Core/Src/key_parse.c **** 
+ 987              		.loc 1 120 1 view .LVU245
+ 988 00da BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 989              	.LVL141:
+ 990              	.L75:
+ 120:Core/Src/key_parse.c **** 
+ 991              		.loc 1 120 1 view .LVU246
+ 992 00de 00BF     		.align	2
+ 993              	.L74:
+ 994 00e0 00000000 		.word	.LANCHOR0
+ 995 00e4 00000000 		.word	hUsbDeviceFS
+ 996              		.cfi_endproc
+ 997              	.LFE136:
+ 999              		.section	.text.pressFunction,"ax",%progbits
+ 1000              		.align	1
+ 1001              		.global	pressFunction
+ 1002              		.syntax unified
+ 1003              		.thumb
+ 1004              		.thumb_func
+ 1005              		.fpu fpv4-sp-d16
+ 1007              	pressFunction:
+ 1008              	.LVL142:
+ 1009              	.LFB140:
+ 146:Core/Src/key_parse.c **** 
+ 147:Core/Src/key_parse.c **** void pressFunction(unsigned char key){
+ 1010              		.loc 1 147 38 is_stmt 1 view -0
+ 1011              		.cfi_startproc
+ARM GAS  /tmp/ccjKiXZ0.s 			page 24
+
+
+ 1012              		@ args = 0, pretend = 0, frame = 0
+ 1013              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1014              		.loc 1 147 38 is_stmt 0 view .LVU248
+ 1015 0000 08B5     		push	{r3, lr}
+ 1016              	.LCFI5:
+ 1017              		.cfi_def_cfa_offset 8
+ 1018              		.cfi_offset 3, -8
+ 1019              		.cfi_offset 14, -4
+ 148:Core/Src/key_parse.c ****     key_data[2]=key;
+ 1020              		.loc 1 148 5 is_stmt 1 view .LVU249
+ 1021              		.loc 1 148 16 is_stmt 0 view .LVU250
+ 1022 0002 0749     		ldr	r1, .L78
+ 1023 0004 8870     		strb	r0, [r1, #2]
+ 149:Core/Src/key_parse.c ****     USBD_HID_SendReport(&hUsbDeviceFS,key_data,8);
+ 1024              		.loc 1 149 5 is_stmt 1 view .LVU251
+ 1025 0006 0822     		movs	r2, #8
+ 1026 0008 0648     		ldr	r0, .L78+4
+ 1027              	.LVL143:
+ 1028              		.loc 1 149 5 is_stmt 0 view .LVU252
+ 1029 000a FFF7FEFF 		bl	USBD_HID_SendReport
+ 1030              	.LVL144:
+ 150:Core/Src/key_parse.c ****     HAL_Delay(KEY_DELAY);
+ 1031              		.loc 1 150 5 is_stmt 1 view .LVU253
+ 1032 000e 1920     		movs	r0, #25
+ 1033 0010 FFF7FEFF 		bl	HAL_Delay
+ 1034              	.LVL145:
+ 151:Core/Src/key_parse.c ****     key_unpress_all();
+ 1035              		.loc 1 151 5 view .LVU254
+ 1036 0014 FFF7FEFF 		bl	key_unpress_all
+ 1037              	.LVL146:
+ 152:Core/Src/key_parse.c ****     HAL_Delay(KEY_DELAY);
+ 1038              		.loc 1 152 5 view .LVU255
+ 1039 0018 1920     		movs	r0, #25
+ 1040 001a FFF7FEFF 		bl	HAL_Delay
+ 1041              	.LVL147:
+ 153:Core/Src/key_parse.c **** }
+ 1042              		.loc 1 153 1 is_stmt 0 view .LVU256
+ 1043 001e 08BD     		pop	{r3, pc}
+ 1044              	.L79:
+ 1045              		.align	2
+ 1046              	.L78:
+ 1047 0020 00000000 		.word	.LANCHOR0
+ 1048 0024 00000000 		.word	hUsbDeviceFS
+ 1049              		.cfi_endproc
+ 1050              	.LFE140:
+ 1052              		.section	.bss.key_data,"aw",%nobits
+ 1053              		.align	2
+ 1054              		.set	.LANCHOR0,. + 0
+ 1057              	key_data:
+ 1058 0000 00000000 		.space	8
+ 1058      00000000 
+ 1059              		.text
+ 1060              	.Letext0:
+ 1061              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 1062              		.file 3 "/usr/lib/gcc/arm-none-eabi/9.2.1/include/stddef.h"
+ 1063              		.file 4 "/usr/include/newlib/sys/_types.h"
+ 1064              		.file 5 "/usr/include/newlib/sys/reent.h"
+ARM GAS  /tmp/ccjKiXZ0.s 			page 25
+
+
+ 1065              		.file 6 "/usr/include/newlib/sys/lock.h"
+ 1066              		.file 7 "/usr/include/newlib/sys/_stdint.h"
+ 1067              		.file 8 "/usr/include/newlib/stdlib.h"
+ 1068              		.file 9 "Drivers/CMSIS/Include/core_cm4.h"
+ 1069              		.file 10 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 1070              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 1071              		.file 12 "Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h"
+ 1072              		.file 13 "Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc/usbd_hid.h"
+ 1073              		.file 14 "Core/Inc/key_parse.h"
+ARM GAS  /tmp/ccjKiXZ0.s 			page 26
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 key_parse.c
+     /tmp/ccjKiXZ0.s:18     .text.ascii_to_key:0000000000000000 $t
+     /tmp/ccjKiXZ0.s:26     .text.ascii_to_key:0000000000000000 ascii_to_key
+     /tmp/ccjKiXZ0.s:100    .text.ascii_to_key:000000000000004a $d
+     /tmp/ccjKiXZ0.s:162    .text.ascii_to_key:0000000000000088 $t
+     /tmp/ccjKiXZ0.s:268    .text.parse_key:0000000000000000 $t
+     /tmp/ccjKiXZ0.s:275    .text.parse_key:0000000000000000 parse_key
+     /tmp/ccjKiXZ0.s:294    .text.parse_key:000000000000000e $d
+     /tmp/ccjKiXZ0.s:612    .text.key_press:0000000000000000 $t
+     /tmp/ccjKiXZ0.s:619    .text.key_press:0000000000000000 key_press
+     /tmp/ccjKiXZ0.s:652    .text.key_press:0000000000000018 $d
+     /tmp/ccjKiXZ0.s:658    .text.key_unpress:0000000000000000 $t
+     /tmp/ccjKiXZ0.s:665    .text.key_unpress:0000000000000000 key_unpress
+     /tmp/ccjKiXZ0.s:691    .text.key_unpress:0000000000000014 $d
+     /tmp/ccjKiXZ0.s:697    .text.key_unpress_all:0000000000000000 $t
+     /tmp/ccjKiXZ0.s:704    .text.key_unpress_all:0000000000000000 key_unpress_all
+     /tmp/ccjKiXZ0.s:754    .text.key_unpress_all:0000000000000020 $d
+     /tmp/ccjKiXZ0.s:760    .text.key_print:0000000000000000 $t
+     /tmp/ccjKiXZ0.s:767    .text.key_print:0000000000000000 key_print
+     /tmp/ccjKiXZ0.s:994    .text.key_print:00000000000000e0 $d
+     /tmp/ccjKiXZ0.s:1000   .text.pressFunction:0000000000000000 $t
+     /tmp/ccjKiXZ0.s:1007   .text.pressFunction:0000000000000000 pressFunction
+     /tmp/ccjKiXZ0.s:1047   .text.pressFunction:0000000000000020 $d
+     /tmp/ccjKiXZ0.s:1053   .bss.key_data:0000000000000000 $d
+     /tmp/ccjKiXZ0.s:1057   .bss.key_data:0000000000000000 key_data
+     /tmp/ccjKiXZ0.s:387    .text.parse_key:000000000000006b $d
+     /tmp/ccjKiXZ0.s:387    .text.parse_key:000000000000006c $t
+
+UNDEFINED SYMBOLS
+USBD_HID_SendReport
+HAL_Delay
+hUsbDeviceFS
