@@ -7,4 +7,5 @@
 - [x] jlink调试器（其它下载方式也行）
 
 ## 详细文档
-[详细文档](https://www.it-res.com/badusb-principles-and-stm32-hid-tutorial-source-code-and-github-link.html "详细文档")
+[详细文档](https://devresourcehub.com/badusb-principles-and-stm32-hid-tutorial-source-code-and-github-link.html "详细文档")
+
